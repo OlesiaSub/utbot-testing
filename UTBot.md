@@ -1,7 +1,7 @@
 ### Результаты запусков UTBot
 
-Тестовые файлы лежат в директории `src/examples/utbot/proguard.sources`.  
-Сгенерированные по ним тесты лежат в директории `src/examples/utbot/results`
+Тестовые файлы лежат в директории `src/utbot/proguard.sources`.  
+Сгенерированные по ним тесты лежат в директории `src/utbot/results`
 
 #### s1
 Время: 56сек

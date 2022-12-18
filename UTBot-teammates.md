@@ -1,5 +1,5 @@
 UTbot was launched on the [TEAMMATES](https://github.com/TEAMMATES/teammates) project.  
-Generated tests can be found in the `src/utbot/teammates-test` directory.  
+Generated tests can be found in the `src/utbot/teammates` directory.  
 The tool was only launched on the `src/main/java` directory, some packages were skipped. The detailed description can be found below.
 
 #### TEAMMATES overview
