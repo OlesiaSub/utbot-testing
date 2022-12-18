@@ -1,6 +1,4 @@
-### Testing UTBot and proguard-core on generated examples
- 
-Репозиторий с результатами запусков UTBot и ProGuard-core.
+### Репозиторий с результатами запусков UTBot и ProGuard-core
 
 ### UTBot
 В файле `UTBot.md` содержится информация о результатах запусков UtBot на сгенерированных примерах.  
