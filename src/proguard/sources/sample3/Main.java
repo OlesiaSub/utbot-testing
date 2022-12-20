@@ -1,4 +1,4 @@
-package src.proguard.sources.s3;
+package src.proguard.sources.sample3;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

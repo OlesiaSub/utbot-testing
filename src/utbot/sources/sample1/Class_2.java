@@ -1,4 +1,4 @@
-package src.utbot.sources.s1;
+package src.utbot.sources.sample1;
 
 public class Class_2 extends Class_1 {
     public static char class_2_field_0 = '0';
