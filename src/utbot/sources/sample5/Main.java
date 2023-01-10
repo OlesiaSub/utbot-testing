@@ -1,4 +1,4 @@
-package src.utbot.sources.s5;
+package src.utbot.sources.sample5;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
