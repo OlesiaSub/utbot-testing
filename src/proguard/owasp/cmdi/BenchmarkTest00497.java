@@ -15,7 +15,7 @@
  * @author Nick Sanidas
  * @created 2015
  */
-package src.proguard.owasp;
+package src.proguard.owasp.cmdi;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
  * DOES NOT WORK
  */
 
-@WebServlet(value = "/cmdi-00/BenchmarkTest00498")
-public class BenchmarkTest00498 extends HttpServlet {
+@WebServlet(value = "/cmdi-00/BenchmarkTest00497")
+public class BenchmarkTest00497 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,32 +56,43 @@ public class BenchmarkTest00498 extends HttpServlet {
         String param = "";
         if (!map.isEmpty()) {
             // MODIFIED: replace String[] with List<String>, doesn't work with array values access
-            List<String> values = Arrays.stream(map.get("BenchmarkTest00498")).collect(Collectors.toList());
+            List<String> values = Arrays.stream(map.get("BenchmarkTest00497")).collect(Collectors.toList());
             if (values != null) param = values.get(0);
         }
 
-        String bar = "";
-        if (param != null) {
-            // PROBLEM: fails for getBytes operation
-            bar =
-                    new String(
-                            org.apache.commons.codec.binary.Base64.decodeBase64(
-                                    org.apache.commons.codec.binary.Base64.encodeBase64(
-                                            param.getBytes())));
+        String bar;
+        // MODIFIED: replace string "ABC" with List<Character>, problems with 'charAt', 'toCharArray', etc
+        List<Character> guess = List.of('A', 'B', 'C');
+        char switchTarget = guess.get(0);
+
+        // Simple case statement that assigns param to bar on conditions 'A', 'C', or 'D'
+        switch (switchTarget) {
+            case 'A':
+                bar = param;
+                break;
+            case 'B':
+                bar = "bobs_your_uncle";
+                break;
+            case 'C':
+            case 'D':
+                bar = param;
+                break;
+            default:
+                bar = "bobs_your_uncle";
+                break;
         }
 
-        String cmd = "...";
-//                org.owasp.benchmark.helpers.Utils.getInsecureOSCommandString(
-//                        this.getClass().getClassLoader());
+        String cmd =
+                org.owasp.benchmark.helpers.Utils.getInsecureOSCommandString(
+                        this.getClass().getClassLoader());
         String[] args = {cmd};
-
-        // PROBLEM: will not treat this array as tainted, though 'bar' may be tainted. But because of the above error with getBytes we won't reach this line anyways
+        // PROBLEM: does not treat this array as tainted, though 'bar' is tainted
         String[] argsEnv = {bar};
 
         Runtime r = Runtime.getRuntime();
 
         try {
-            Process p = r.exec(args, argsEnv, new java.io.File(System.getProperty("user.dir")));
+            Process p = r.exec(args, argsEnv);
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
         } catch (IOException e) {
             System.out.println("Problem executing cmdi - TestCase");

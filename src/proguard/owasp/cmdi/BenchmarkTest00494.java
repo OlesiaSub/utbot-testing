@@ -15,7 +15,7 @@
  * @author Nick Sanidas
  * @created 2015
  */
-package src.proguard.owasp;
+package src.proguard.owasp.cmdi;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,20 +25,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * Command injection example
  * source: MethodSignature("javax/servlet/http/HttpServletRequest", "getParameterMap", "()Ljava/util/Map;")
- * sink: MethodSignature("java/lang/Runtime", "exec", "(Ljava/lang/String;[Ljava/lang/String;Ljava/io/File;)Ljava/lang/Process;")
+ * sink: MethodSignature("java/lang/Runtime", "exec", "([Ljava/lang/String;)Ljava/lang/Process;")
  * main: doGet
  *
- * WORKS
+ * DOES NOT WORK
  */
 
-@WebServlet(value = "/cmdi-00/BenchmarkTest00500")
-public class BenchmarkTest00500 extends HttpServlet {
+@WebServlet(value = "/cmdi-00/BenchmarkTest00494")
+public class BenchmarkTest00494 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,34 +52,50 @@ public class BenchmarkTest00500 extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        Map<String, String[]> map = request.getParameterMap();
+        java.util.Map<String, String[]> map = request.getParameterMap();
         String param = "";
         if (!map.isEmpty()) {
             // MODIFIED: replace String[] with List<String>, doesn't work with array values access
-            List<String> values = Arrays.stream(map.get("BenchmarkTest00500")).toList();
-            if (values != null) param = values.get(1);
+            List<String> values = Arrays.stream(map.get("BenchmarkTest00498")).collect(Collectors.toList());
+            if (values != null) param = values.get(0);
         }
-        String bar;
 
-        // Simple if statement that assigns param to bar on true condition
-        int num = 196;
-        if ((500 / 42) + num > 200) bar = param;
-        else bar = "This should never happen";
+        // PROBLEM: addition of a tainted argument to a list does not make the list tainted
+        String bar = "alsosafe";
+        if (param != null) {
+            List<String> valuesList = new java.util.ArrayList<String>();
+            valuesList.add("safe");
+            valuesList.add(param);
+            valuesList.add("moresafe");
 
-        String cmd = "...";
+            valuesList.remove(0); // remove the 1st safe value
 
-        // MODIFIED: comment out the code below, otherwise there is some evaluation exception
-//        String osName = System.getProperty("os.name");
-//        if (osName.indexOf("Windows") != -1) {
-//            cmd = org.owasp.benchmark.helpers.Utils.getOSCommandString("echo");
-//        }
+            bar = valuesList.get(1); // get the last 'safe' value
+        }
 
-        String[] argsEnv = {"Foo=bar"};
+        String cmd = "";
+        String a1 = "";
+        String a2 = "";
+        String[] args = null;
+        String osName = System.getProperty("os.name");
+
+        if (osName == "Windows") {
+            a1 = "cmd.exe";
+            a2 = "/c";
+            cmd = org.owasp.benchmark.helpers.Utils.getOSCommandString("echo");
+            // PROBLEM: addition of a tainted arg to an array won't make an array tainted
+            args = new String[] {a1, a2, cmd, bar};
+        } else {
+            a1 = "sh";
+            a2 = "-c";
+            cmd = org.owasp.benchmark.helpers.Utils.getOSCommandString("ping -c1 ");
+            args = new String[] {a1, a2, cmd + bar};
+        }
+
         Runtime r = Runtime.getRuntime();
 
         try {
-            Process p =
-                    r.exec(cmd + bar, argsEnv, new java.io.File(System.getProperty("user.dir")));
+            Process p = r.exec(args);
             org.owasp.benchmark.helpers.Utils.printOSCommandResults(p, response);
         } catch (IOException e) {
             System.out.println("Problem executing cmdi - TestCase");
@@ -88,8 +103,5 @@ public class BenchmarkTest00500 extends HttpServlet {
                     .println(org.owasp.esapi.ESAPI.encoder().encodeForHTML(e.getMessage()));
             return;
         }
-    }
-
-    public void sink4(Map<String, String[]> map) {
     }
 }

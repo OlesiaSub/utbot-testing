@@ -15,7 +15,7 @@
  * @author Nick Sanidas
  * @created 2015
  */
-package src.proguard.owasp;
+package src.proguard.owasp.cmdi;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
