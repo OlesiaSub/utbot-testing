@@ -1,0 +1,41 @@
+"Basic1","success",""
+"Basic10","fail",insertion of a tainted value into another object does not make the object tainted
+"Basic11","success",""
+"Basic12","success",""
+"Basic13","success",""
+"Basic14","success",""
+"Basic15","fail",insertion of a tainted value into another object does not make the object tainted
+"Basic16","fail",insertion of a tainted value into another object does not make the object tainted
+"Basic17","fail",insertion of a tainted value into another object does not make the object tainted
+"Basic18","success",""
+"Basic19","success",""
+"Basic2","success",""
+"Basic20","success",""
+"Basic21","success",""
+"Basic22","success",""
+"Basic23","success",""
+"Basic24","success",""
+"Basic25","success",""
+"Basic26","success",""
+"Basic27","success",""
+"Basic28","success",""
+"Basic29","success",""
+"Basic3","success",""
+"Basic30","success",""
+"Basic31","success",""
+"Basic32","success",""
+"Basic33","success",""
+"Basic34","success",""
+"Basic35","success",""
+"Basic36","fail",creation of an object with tainted parameter does not make the object tainted
+"Basic37","fail",creation of an object with tainted parameter does not make the object tainted
+"Basic38","fail",creation of an object with tainted parameter does not make the object tainted
+"Basic39","fail",creation of an object with tainted parameter does not make the object tainted
+"Basic4","success",""
+"Basic41","success",""
+"Basic42","success",""
+"Basic5","success",""
+"Basic6","success",""
+"Basic7","fail",creation of an object with tainted parameter does not make the object tainted
+"Basic8","success",""
+"Basic9","success",""
